@@ -1,0 +1,1 @@
+docker build -t dkr_kube_toolbox:0.1 .

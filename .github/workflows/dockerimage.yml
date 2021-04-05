@@ -1,0 +1,24 @@
+name: Docker registry
+
+on: [push]
+
+jobs:
+  github:
+    runs-on: ubuntu-latest    
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Login to docker hub
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_IMAGE: ${{ secrets.DOCKER_IMAGE }}
+    
+      - name: Build :latest
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}:0.1 .
+      
+      - name: Push to docker hub :latest
+        uses: actions-hub/docker@master
+        with:
+          args: push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE }}:0.1
